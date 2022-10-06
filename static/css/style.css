@@ -1,19 +1,16 @@
 html, body {
+    scroll-behavior: smooth;
     height: 100%;
     margin: 0;
     max-width: 100%;
-    overflow: hidden;
 }
 
 /* Keep the footer always down */
 .wrapper {
     min-height: 100%;
     margin-bottom: -50px;
+    scroll-behavior: smooth;
 }
-#footer{
-    position: absolute;
-    width: 100%;
-    bottom: 0;
+#footer, .push {
     height: 50px;
-    font-size: 13px;
 }

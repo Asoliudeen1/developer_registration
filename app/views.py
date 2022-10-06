@@ -4,13 +4,13 @@ from django.contrib import messages
 
 def home(request):
     if request.method == 'POST':
-        form = CandidateForm(request.POST)
+        form = CandidateForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, "Record saved successfully !")
             return redirect('/')
         else:
-            messages.errort("Invalid form field")
+            messages.error(request, "Invalid form field")
     else:
         form = CandidateForm()
     context={'form': form,}

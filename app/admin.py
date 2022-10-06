@@ -1,8 +1,13 @@
 from django.contrib import admin
 from app.models import candidate
 from django.utils.html import format_html
+from .forms import CandidateForm
 
 class CandidateAdmin(admin.ModelAdmin):
+    radio_fields = {"smoker": admin.HORIZONTAL}
+    form = CandidateForm
+    readonly_fields = ['experience', 'first_name', 'last_name', 'job', 'email', 'age', 'phone', 'salary', 'personality', 'gender', 'smoker', 'file', 'frameworks', 'languages', 'databases', 'libraries', 'mobile', 'others','message',  'created_at']
+    exclude = ['status']
     list_filter= ['Situation']
     list_display= ['first_name', 'last_name', 'job', 'email', 'age', 'created_at', 'status', '_']
     search_fields = ['first_name', 'last_name', 'email', 'age', 'Situation']
