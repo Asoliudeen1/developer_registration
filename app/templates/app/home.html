@@ -3,18 +3,46 @@
 
 {% block content %}
 <div class="container mt-3" style="width: 95%; font-size: 14px;">
-    <!-- Messages from backend -->
+   <!-- ERROR Messages(For All FIELDS) from FORM.PY
+    {% for field in form %}
+        {% for error in field.errors %}
+        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert"><strong>{{error|escape}}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endfor %} -->
+
+
+    <!-- ERROR Messages(Single Field) from FORM.PY -->
+    <!-- # NOTE: STRIPTAG removed <li> 
+    {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert"><strong>{{form.email.errors|striptags}}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}-->
+
+
+    {% if form.errors %}
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        var m = "{{ form.email.errors|striptags }}";
+        swal("Denied !", m, "error")
+    </script>
+    {% endif %}
+
+
+    <!-- SUCCESS Messages from backend -->
     <div class="text-center ">
         {% for message in messages %}
             {% if message.tags == 'success' %}
-                <div class="alert alert-primary alert-dismissible fade show" role="alert">{{message}}
+                <div class="alert alert-primary alert-dismissible fade show" role="alert"><strong>{{message}}</strong>
                     <a href="{% url 'home' %}" type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
                 </div>
             {% endif %}
         {% endfor %}
     </div>
 
-    <form method="post"  enctype="multipart/form-data"  class="mt-3" autocomplete="off" novalidate>
+    <form method="post"  enctype="multipart/form-data"  class="mt-3" novalidate>
         {% csrf_token %}
         <div class="card border-dark p-3">
             <span class="btn btn-secondary mb-4" style="cursor: default;">

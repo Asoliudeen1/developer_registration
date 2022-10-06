@@ -22,7 +22,7 @@ class CandidateForm(forms.ModelForm):
     first_name = forms.CharField(
         min_length=3, max_length=30,
         validators=[RegexValidator(r'^[a-zA-ZÀ-ÿ\s]*$', 
-        message='Only letters is allowed!')], 
+        message='Only letters is allowed!')],
         widget=forms.TextInput(attrs={
             'placeholder': 'First Name',
             'style': 'font-size: 13px; text-transform: capitalize'
@@ -45,7 +45,8 @@ class CandidateForm(forms.ModelForm):
         min_length=5, max_length=5, 
         widget=forms.TextInput(attrs={
             'placeholder': 'Example: FR-22',
-            'style': 'font-size: 13px; text-transform: uppercase'
+            'style': 'font-size: 13px; text-transform: uppercase',
+            'data-mask': 'AA-00',
             }))
 
 
@@ -54,6 +55,7 @@ class CandidateForm(forms.ModelForm):
         min_length=8, max_length=50,
         validators=[RegexValidator(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$', 
         message='Put a valid email address!')], 
+        error_messages={'required': 'Email field cannot be empty'},
         widget=forms.TextInput(attrs={
             'placeholder': 'Email',
             'style': 'font-size: 13px; text-transform: lowercase'
@@ -148,19 +150,28 @@ class CandidateForm(forms.ModelForm):
         # self.fields['experience'].disabled = False
         # self.fields['email'].widget.attrs.update({'readonly': 'readonly'})
 
+
         # SELECT OPTIONS
        # self.fields['personality'].choices = [('', 'Select a personality'),] + list(self.fields["personality"].choices)[1:]
-        
+
+
         # WIDGET CONTROL
         #Readonly
         # readonly = ['first_name', 'last_name', 'job']
         # for field in readonly:
         #     self.fields[field].widget.attrs['readonly'] = False
-            
+
+
         # # Disable
         # disabled = ['first_name', 'last_name', 'job']
         # for field in disabled:
         #     self.fields[field].widget.attrs['disabled'] = False
+
+
+        # OVERRIDE ERROR MESSAGES
+      #  error_messages = ['first_name', 'last_name', 'job', 'email', 'age', 'phone', 'personality', 'gender']
+       # for field in error_messages:
+        #    self.fields[field].error_messages.update({'required':'Bla Bla'})
     #----------------------------------------------------------
 
 
@@ -177,3 +188,33 @@ class CandidateForm(forms.ModelForm):
     #     if candidate.objects.filter(email=email).exists():
     #         raise forms.ValidationError('Denied! {} is already registered.'.format(email))
     #     return email
+
+
+    # Job Code Validation
+    def clean_job(self):
+        job = self.cleaned_data.get('job')
+        if job == 'FR-22' or job == 'BA-10' or job == 'FU-15':
+            return job
+        else:
+            raise forms.ValidationError(job +  ' is not a valid Job code')
+    
+    # Age Validation (Range: 18-65)
+    def clean_age(self):
+        age = self.cleaned_data.get('age')
+        if age < '18' or age > '65':
+            raise forms.ValidationError('Age must be between 18 and 65')
+        return age
+
+    
+    #Phone Number(Prevent Incomplete Value)
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if len(phone) != 14:
+            raise forms.ValidationError('Phone field is incomplete')
+        return phone
+
+
+
+
+
+
