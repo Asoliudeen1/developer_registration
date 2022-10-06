@@ -113,3 +113,11 @@ class candidate(models.Model):
     def clean(self):
         self.first_name = self.first_name.capitalize()
         self.last_name = self.last_name.capitalize()
+
+    # Concatenate Firstname and Lastname (Admin Table)
+    def name(obj):
+        return "%s %s" % (obj.first_name, obj.last_name)
+
+    # Concatenate (when you click over the Candidate)
+    def __str__(self):
+        return self.first_name + ' ' + self.last_name

@@ -2,7 +2,7 @@ from faulthandler import disable
 from django import forms
 from .models import SMOKER, candidate
 from django.core.validators import RegexValidator
-
+from django.core.exceptions import ValidationError
 
 # Functions to convert every letter to Lowercase
 class LowerCase(forms.CharField):
@@ -161,3 +161,19 @@ class CandidateForm(forms.ModelForm):
         # disabled = ['first_name', 'last_name', 'job']
         # for field in disabled:
         #     self.fields[field].widget.attrs['disabled'] = False
+    #----------------------------------------------------------
+
+
+    # FUNCTIONS TO PREVENT DUPLICATED ENTRIES
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        for obj in candidate.objects.all():
+            if obj.email == email:
+                raise forms.ValidationError('Denied! ' + email +  ' is already registered.')
+        return email
+
+    # def clean_email(self):
+    #     email = self.cleaned_data.get('email')
+    #     if candidate.objects.filter(email=email).exists():
+    #         raise forms.ValidationError('Denied! {} is already registered.'.format(email))
+    #     return email
