@@ -1,8 +1,13 @@
+from email.mime import image
 from faulthandler import disable
+import re
 from django import forms
-from .models import SMOKER, candidate
+from .models import SMOKER, STATUS_COURSE, candidate
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
+from datetime import date 
+import datetime
+
 
 # Functions to convert every letter to Lowercase
 class LowerCase(forms.CharField):
@@ -61,15 +66,16 @@ class CandidateForm(forms.ModelForm):
             'style': 'font-size: 13px; text-transform: lowercase'
             }))
 
-    # Age
-    age = forms.CharField(
-        min_length=2, max_length=3,
-        validators=[RegexValidator(r'^[0-9]*$', 
-        message='Only number is allowed!')], 
-        widget=forms.TextInput(attrs={
-            'placeholder': 'Age',
-            'style': 'font-size: 13px',
-            }))
+    # # Age
+    # age = forms.CharField(
+    #     min_length=2, max_length=3,
+    #     validators=[RegexValidator(r'^[0-9]*$', 
+    #     message='Only number is allowed!')], 
+    #     widget=forms.TextInput(attrs={
+    #         'placeholder': 'Age',
+    #         'style': 'font-size: 13px',
+    #         }))
+
 
     # Experience 
     experience = forms.BooleanField(label='I have exprience', required=False)
@@ -87,16 +93,104 @@ class CandidateForm(forms.ModelForm):
 
     # FIle (upload)
     file = forms.FileField(
-        required=False,
+        label='Resume',
         widget=forms.ClearableFileInput(
             attrs={
-                'style':'font-size: 13px'
+                'style':'font-size: 13px',
+                #'accept': 'application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            }
+        )
+    )
+
+    # FIle (upload)
+    image = forms.FileField(
+        label='Photo',
+        widget=forms.ClearableFileInput(
+            attrs={
+                'style':'font-size: 13px',
+                #'accept': 'image/png, image/jpeg'
             }
         )
 
     )
     
+    # Institution
+    institution = forms.CharField(
+        label ='Institution',
+        min_length=3,
+        max_length=50,
+        widget=forms.TextInput(attrs={
+            'style':'font-size: 13x',
+            'placeholder':'Institution',
+        })
+    )
     
+
+    # Course
+    course = forms.CharField(
+        label ='Course',
+        min_length=3,
+        max_length=50,
+        widget=forms.TextInput(attrs={
+            'style':'font-size: 13px',
+            'placeholder':'Course',
+        })
+    )
+
+
+    # About Course
+    about_course = forms.CharField(
+        required=False,
+        min_length=10, max_length=80,
+        widget=forms.Textarea(attrs={
+            'placeholder': 'About your college course', 'rows':4,
+            'style': 'font-size: 13px',
+            }
+        ),
+    )
+
+    # About Course
+    about_job = forms.CharField(
+        required=False,
+        min_length=10, max_length=80,
+        widget=forms.Textarea(attrs={
+            'placeholder': 'Tell us about what you did at the company', 'rows':4,
+            'style': 'font-size: 13px',
+            }
+        ),
+    )
+
+
+    # Company
+    company = forms.CharField(
+        label='Last company',
+        min_length=3, 
+        max_length=50,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Company name',
+            'style': 'font-size: 13px',
+            }
+        ),
+    )
+
+
+    # Position (Occupation)
+    position = forms.CharField(
+        min_length=3, 
+        max_length=50,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Your occupation',
+            'style': 'font-size: 13px',
+            }
+        ),
+    )
+
+    #CONVERT TO CHECKBOX
+    employed = forms.BooleanField(label='I am employed', required=False)
+    remote = forms.BooleanField(label='I agree to work remotely', required=False)
+    travel = forms.BooleanField(label='I am available to travel', required=False)
+
+
     # #GENDER
     # GENDER =[('M', 'Male'), ('F', 'Female')]
     # gender = forms.CharField(label='Gender', widget=forms.RadioSelect(choices=GENDER))
@@ -105,6 +199,12 @@ class CandidateForm(forms.ModelForm):
     class Meta:
         model = candidate
         exclude = ['Situation', 'created_at']
+        labels ={
+            'started_course':'Started',
+            'finished_course':'Finished',
+            'started_job':'Started',
+            'finished_job':'Finished',
+        }
         
         
         SALARY = (
@@ -118,8 +218,64 @@ class CandidateForm(forms.ModelForm):
 
         GENDER =[('M', 'Male'), ('F', 'Female')]
        
+
         #OUTSIDE Widget
         widgets = {
+            'birth': forms.DateInput(
+                attrs={
+                    'style':'font-size: 18px; cursor: pointer',
+                    'type': 'date',
+                    'onkeydown': 'return false', # Block typing Inside the input
+                    'min':'1950-01-01',
+                    'max':'2030-01-01'
+                }
+            ),
+
+            
+            'started_course': forms.DateInput(
+                attrs={
+                    'style':'font-size: 18px; cursor: pointer',
+                    'type': 'date',
+                    'onkeydown': 'return false', # Block typing Inside the input
+                    'min':'1950-01-01',
+                    'max':'2030-01-01'
+                }
+            ),
+
+
+            'finished_course': forms.DateInput(
+                attrs={
+                'style':'font-size: 18px; cursor: pointer',
+                'type': 'date',
+                'onkeydown': 'return false', # Block typing Inside the input
+                'min':'1950-01-01',
+                'max':'2030-01-01'
+                }
+            ),
+
+
+            'started_job': forms.DateInput(
+                attrs={
+                'style':'font-size: 18px; cursor: pointer',
+                'type': 'date',
+                'onkeydown': 'return false', # Block typing Inside the input
+                'min':'1950-01-01',
+                'max':'2030-01-01'
+                }
+            ),
+
+
+            'finished_job': forms.DateInput(
+                attrs={
+                'style':'font-size: 18px; cursor: pointer',
+                'type': 'date',
+                'onkeydown': 'return false', # Block typing Inside the input
+                'min':'1950-01-01',
+                'max':'2030-01-01'
+                }
+            ),
+
+
             'phone': forms.TextInput(
                 attrs={
                     'style':'font-size: 18px',
@@ -137,9 +293,11 @@ class CandidateForm(forms.ModelForm):
                 }
             ),
 
+            # Convert CharField to Radio Button
             'gender': forms.RadioSelect(choices=GENDER, attrs={'class': 'btn-check'}),
             'smoker': forms.RadioSelect(choices=SMOKER, attrs={'class': 'btn-check'}),
             'personality': forms.Select(attrs={'style': 'font-size: 13px'}),
+            'status_course': forms.Select(attrs={'style': 'font-size: 13px'}), 
         }
 
     #SUPER FUNCTION
@@ -198,12 +356,12 @@ class CandidateForm(forms.ModelForm):
         else:
             raise forms.ValidationError(job +  ' is not a valid Job code')
     
-    # Age Validation (Range: 18-65)
-    def clean_age(self):
-        age = self.cleaned_data.get('age')
-        if age < '18' or age > '65':
-            raise forms.ValidationError('Age must be between 18 and 65')
-        return age
+    # # Age Validation (Range: 18-65)
+    # def clean_age(self):
+    #     age = self.cleaned_data.get('age')
+    #     if age < '18' or age > '65':
+    #         raise forms.ValidationError('Age must be between 18 and 65')
+    #     return age
 
     
     #Phone Number(Prevent Incomplete Value)
@@ -214,7 +372,71 @@ class CandidateForm(forms.ModelForm):
         return phone
 
 
+    # # RESTRICTION (File extension)
+    # def clean_file(self):
+    #     file = self.cleaned_data['file']
+    #     content_type = file.content_type
+    #     if content_type == 'application/pdf' or  content_type == 'application/msword' or content_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+    #         return file
+    #     else:
+    #         raise forms.ValidationError('Only: PDF -DOC - DOCX')
 
 
+    # RESTRICTION (File extension and FILE SIZE)
+    def clean_file(self):
+        file = self.cleaned_data.get("file", False)
+        EXT = ['pdf', 'doc', 'docx']
+        ext = str(file).split('.')[-1]
+        type = ext.lower()
+        if type not in EXT:
+            raise forms.ValidationError('Only: PDF - DOC - DOCX')
+        
+        #prevent upload more than 2mb
+        if file.size > 2 * 1048476:
+            raise forms.ValidationError('Denied! Maximum allowed is 2mb.')
+        return file
+
+    # RESTRICTION (FILE SIZE)
+    def image(self):
+        image = self.cleaned_data.get('image')
+        if image.size > 2 * 1048476:
+            raise forms.ValidationError('Denied! Maximum allowed is 2mb.')
+        return image
+
+    # BIRTHDAY (Rnage: 18 and 65)
+    def clean_birth(self):
+        birth = self.cleaned_data.get('birth')
+        b = birth
+        now = date.today()
+        age = (now.year - b.year) - ((now.month, now.day) < (b.month, b.day))
+        if age < 18 or age > 65:
+            raise forms.ValidationError('Denied! Age must be between 18 and 65.')
+        return birth
 
 
+    # PREVENT FUTURES dates (EDUCATION AND JOB)
+    # EDUCATION
+    def clean_started_course(self):
+        started_course = self.cleaned_data.get('started_course')
+        if started_course > datetime.date.today():
+             raise forms.ValidationError('Enter Valid date (Future date is not valid)')
+        return started_course
+
+    def clean_finished_course(self):
+        finished_course = self.cleaned_data.get('finished_course')
+        if finished_course > datetime.date.today():
+             raise forms.ValidationError('Enter Valid date (Future date is not valid)')
+        return finished_course
+
+    #JOB
+    def clean_started_job(self):
+        started_job = self.cleaned_data.get('started_job')
+        if started_job > datetime.date.today():
+             raise forms.ValidationError('Enter Valid date (Future date is not valid)')
+        return started_job
+
+    def clean_finished_job(self):
+        finished_job = self.cleaned_data.get('finished_job')
+        if finished_job > datetime.date.today():
+             raise forms.ValidationError('Enter Valid date (Future date is not valid)')
+        return finished_job

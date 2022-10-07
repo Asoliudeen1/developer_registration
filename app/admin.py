@@ -8,13 +8,46 @@ from .forms import CandidateForm
 class CandidateAdmin(admin.ModelAdmin):
     radio_fields = {"smoker": admin.HORIZONTAL}
     form = CandidateForm
-    readonly_fields = ['experience', 'first_name', 'last_name', 'job', 'email', 'age', 'phone', 'salary', 'personality', 'gender', 'smoker', 'file', 'frameworks', 'languages', 'databases', 'libraries', 'mobile', 'others','message',  'created_at']
     exclude = ['status']
     list_filter= ['Situation']
-    list_display= ['name', 'job', 'email', 'age', 'created_at', 'status', '_']
-    search_fields = ['first_name', 'last_name', 'email', 'age', 'Situation']
+    list_display= ['name', 'job', 'email',  'created_at', 'status', '_']
+    search_fields = ['first_name', 'last_name', 'email','Situation']
     list_per_page = 10
+
+    # READONLY (ADMIN DASHBOARD)
+    readonly_fields = ['experience', 'gender', 'first_name', 'last_name', 'job', 'email', 
+    'phone', 'salary', 'birth', 'personality', 'smoker', 'file', 'image', 'frameworks', 
+    'languages', 'databases', 'libraries', 'mobile', 'others','message' ,'status_course',
+    'started_course','finished_course','course','institution','about_course','started_job',
+    'finished_job','company','position','about_job','employed','remote','travel']
     
+
+    #FIELDSET
+    fieldsets =[
+        #HR Operations
+        ('HR OPERATIONS', {'fields': ['Situation', 'company_note']}),
+        
+        # PERSONAL
+        ('PERSONAL', {'fields': ['experience', 'gender', 'job', 'email', 'phone', 
+        'salary','birth', 'personality', 'smoker', 'file', 'image', 'message']}),
+
+        # SKILLS
+        ('SKILLS', {'fields': ['frameworks', 'languages', 'databases', 'libraries', 
+        'mobile', 'others']}),
+        
+        # EDUCATIONAL
+        ('EDUCATIONAL', {'fields': ['status_course', 'started_course', 'finished_course', 'institution', 
+        'course', 'about_course']}),
+
+        # PROFESSIONAL
+        ('PROFESSIONAL', {'fields': ['started_job', 'finished_job', 'company', 'position', 
+        'about_job']}),
+
+        #NOTE
+        ('NOTE', {'fields': ['employed', 'remote', 'travel']}),
+    ]
+
+
     #Function to hide F-name and L-name in the Admin Dashboard
     def get_fields(self, request, obj=None):
         fields = super().get_fields(request, obj)
@@ -23,6 +56,7 @@ class CandidateAdmin(admin.ModelAdmin):
             fields.remove('last_name')
         return fields
     
+
     # Function to change the ICONS
     def _(self, obj):
         if obj.Situation == 'Approved':
