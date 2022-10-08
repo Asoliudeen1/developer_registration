@@ -1,130 +1,25 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container mt-3" style="width: 95%; font-size: 14px;">
-   <!-- ERROR Messages(For All FIELDS) from FORM.PY
-    {% for field in form %}
-        {% for error in field.errors %}
-        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert"><strong>{{error|escape}}</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-    {% endfor %} -->
-
-
-    <!-- ERROR Messages(Single Field) from FORM.PY -->
-    <!-- # NOTE: STRIPTAG removed <li> 
-    {% if form.errors %}
-        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert"><strong>{{form.email.errors|striptags}}</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    {% endif %}-->
-
-
-    {% if form.errors %}
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script>
-        var m = "{{ form.email.errors|striptags }}";
-        swal("Denied !", m, "error")
-    </script>
-    {% endif %}
-
+<div class="container card p-3 border-dark text-center mt-5" styele="width: 35%;">
 
     <!-- SUCCESS Messages from backend -->
     <div class="text-center ">
         {% for message in messages %}
             {% if message.tags == 'success' %}
                 <div class="alert alert-primary alert-dismissible fade show" role="alert"><strong>{{message}}</strong>
-                    <a href="{% url 'home' %}" type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
+                    <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endif %}
         {% endfor %}
     </div>
 
-    <form method="post"  enctype="multipart/form-data"  class="mt-3" novalidate>
-        {% csrf_token %}
-        <!-- CARD 1 PERSONAL -->
-        <div class="card border-dark p-3">
-            <span class="btn btn-secondary mb-4" style="cursor: default;">
-                Frontend: FR-22 &nbsp;&nbsp; Backend: BA-10 &nbsp;&nbsp; Fullstack: FU-15
-            </span>
-            <div class="row">
-                <div class="col-4">{{form.first_name|as_crispy_field}}</div>
-                <div class="col-4">{{form.last_name|as_crispy_field}}</div>
-                <div class="col-4">{{form.job|as_crispy_field}}</div>
-            </div>
-            <div class="row">
-                <div class="col-4">{{form.email|as_crispy_field}}</div>
-                <div class="col-4">{{form.birth|as_crispy_field}}</div>
-                <div class="col-4">{{form.phone|as_crispy_field}}</div>
-            </div>
-            <hr style="border: 1px solid #007bff;">
-            <div class="row">
-                <div class="col-4">{{form.personality|as_crispy_field}}</div>
-                <div class="col-4">{{form.salary|as_crispy_field}}</div>
-                <div class="col-2">{{form.gender|as_crispy_field}}</div>
-                <div class="col-2">{{form.smoker|as_crispy_field}}</div>
-            </div>
-            {{form.experience|as_crispy_field}}
-            <hr style="border: 1px solid #007bff; margin-top: -15px;">
-            {{form.message|as_crispy_field}}
-            <hr style="border: 1px solid #007bff; margin-top: -15px;">
-            {{form.file|as_crispy_field}}
-            {{form.image|as_crispy_field}}
-        </div>
-        <br>
-
-        <!-- CARD 2 SKILLS -->
-        <div class="card border-dark p-3">
-            <span class="btn btn-secondary mb-4" style="cursor: default;">YOUR SKILLS</span>
-            <div class="row">
-                <div class="col-2">{{form.frameworks|as_crispy_field}}</div>
-                <div class="col-2">{{form.languages|as_crispy_field}}</div>
-                <div class="col-2">{{form.databases|as_crispy_field}}</div>
-                <div class="col-2">{{form.libraries|as_crispy_field}}</div>
-                <div class="col-2">{{form.mobile|as_crispy_field}}</div>
-                <div class="col-2">{{form.others|as_crispy_field}}</div>
-            </div>
-        </div>
-        <br>
-        <!-- CARD 3 EDUCATION -->
-        <div class="card border-dark p-3">
-            <span class="btn btn-secondary mb-4" style="cursor: default;">EDUCATIONAL</span>
-            <div class="row mt-1">
-                <div class="col-4">{{form.institution|as_crispy_field}}</div>
-                <div class="col-4">{{form.course|as_crispy_field}}</div>
-                <div class="col-2">{{form.started_course|as_crispy_field}}</div>
-                <div class="col-2">{{form.finished_course|as_crispy_field}}</div>
-            </div>
-            {{form.about_course|as_crispy_field}}
-            <div class="row">
-                <div class="col-3"> {{form.status_course|as_crispy_field}}</div>
-            </div>
-        </div>
-        <br>
-        <!-- CARD 4 PROFESSIONAL -->
-        <div class="card border-dark p-3">
-            <span class="btn btn-secondary mb-4" style="cursor: default;">PROFESSIONAL</span>
-            <div class="row mt-1">
-                <div class="col-4">{{form.company|as_crispy_field}}</div>
-                <div class="col-4">{{form.position|as_crispy_field}}</div>
-                <div class="col-2">{{form.started_job|as_crispy_field}}</div>
-                <div class="col-2">{{form.finished_job|as_crispy_field}}</div>
-            </div>
-            {{form.about_job|as_crispy_field}}
-            <hr style="border: 1px solid #007bff; margin-top: -15px;">
-            <div class="row">
-                <div class="col-3">{{form.employed|as_crispy_field}}</div>
-                <div class="col-3">{{form.remote|as_crispy_field}}</div>
-                <div class="col-3">{{form.travel|as_crispy_field}}</div>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-outline-primary  mt-2" style="width: 90px;">Submit</button>
-        <a href="{% url 'home' %}" class="btn btn-outline-dark  mt-2" style="width: 90px;">Reset</a>
-    </form>
-    <br>
-</div> <-- End Container -->
-<br>
-<br>
-{% endblock %}
+    <h1>Job Vacancy </h1>
+    <h5 class="mt-3"> Frontend: FR-22 &nbsp;&nbsp; Backend: BA-10 &nbsp;&nbsp; Fullstack: FU-15</h5>
+    <hr>
+    <div class="d-grid gap-2 mt-4">
+        <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+        <a href="{% url 'loginpage' %}" class="btn btn-warning">LOG IN</a>
+    </div>
+</div>
+{% endblock content %}

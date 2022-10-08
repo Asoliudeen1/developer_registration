@@ -304,6 +304,25 @@ class CandidateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CandidateForm, self).__init__(*args, **kwargs)
 
+        # #Disable all the inputs field On DETAILVIEW PAGE
+        # instance = getattr(self, 'instance', None)
+        # if instance and instance.pk:
+        #     self.fields['first_name'].disabled = True
+
+        # instance = getattr(self, 'instance', None)
+        # array = ['experience', 'gender', 'first_name', 'last_name', 'job', 'email',
+        #         'phone', 'salary', 'birth', 'personality', 'smoker', 'file', 'image', 'frameworks', 
+        #         'languages', 'databases', 'libraries', 'mobile', 'others','message' ,'status_course',
+        #         'started_course','finished_course','course','institution','about_course','started_job',
+        #         'finished_job','company','position','about_job','employed','remote','travel']
+        # for field in array:
+        #     if instance and instance.pk:
+        #         self.fields[field].disabled = True
+        #         self.fields['file'].widget.attrs.update({'style':'display: none'})
+        #         self.fields['image'].widget.attrs.update({'style':'display: none'})
+
+
+
         # CONTROL PANEL (Optional method to control)
         # self.fields['experience'].disabled = False
         # self.fields['email'].widget.attrs.update({'readonly': 'readonly'})
@@ -356,13 +375,6 @@ class CandidateForm(forms.ModelForm):
         else:
             raise forms.ValidationError(job +  ' is not a valid Job code')
     
-    # # Age Validation (Range: 18-65)
-    # def clean_age(self):
-    #     age = self.cleaned_data.get('age')
-    #     if age < '18' or age > '65':
-    #         raise forms.ValidationError('Age must be between 18 and 65')
-    #     return age
-
     
     #Phone Number(Prevent Incomplete Value)
     def clean_phone(self):
@@ -370,16 +382,6 @@ class CandidateForm(forms.ModelForm):
         if len(phone) != 14:
             raise forms.ValidationError('Phone field is incomplete')
         return phone
-
-
-    # # RESTRICTION (File extension)
-    # def clean_file(self):
-    #     file = self.cleaned_data['file']
-    #     content_type = file.content_type
-    #     if content_type == 'application/pdf' or  content_type == 'application/msword' or content_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-    #         return file
-    #     else:
-    #         raise forms.ValidationError('Only: PDF -DOC - DOCX')
 
 
     # RESTRICTION (File extension and FILE SIZE)

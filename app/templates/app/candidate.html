@@ -1,0 +1,15 @@
+{% extends 'app/register.html' %}
+
+
+<!-- Block Title -->
+{% block title %}Candidate{% endblock title %}
+
+{% block nav-content %}
+<i class="fas fa-user-alt"></i>&nbsp;&nbsp; CANDIDATE
+{% endblock nav-content %}
+
+
+<!--BUTTONS DENIED-->
+{% block buttons %}
+<a href="{% url 'candidates' %}" class="btn btn-secondary mt-4 mb-2 my-btn">Back</a>
+{% endblock buttons %}

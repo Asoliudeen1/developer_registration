@@ -12,6 +12,7 @@ SITUATION = (
 )
 
 PERSONALITY = (
+    ('','Select personality'),
     ('I am outgoing',' I am outgoing'),
     ('I am social','I am social'),
     ('I am antisocial','I am antisocial'),

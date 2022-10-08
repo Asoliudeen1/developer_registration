@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+<!-- Block Title -->
+{% block title %}Login{% endblock title %}
+
+<!-- Block Navbar -->
+{% block navbar %}bg-dark{% endblock navbar %}
+
+{% block nav-content %}
+<i class="fas fa-key"></i>&nbsp;&nbsp; LOGIN
+{% endblock nav-content %}
+
+
+{% block content %}
+<div class="container card p-3 border-dark mt-5" style="width: 30%;">
+    
+    {% if messages %}
+        {% for message in messages %}
+    <div class="alert alert-danger alert-dismissible fade show text-center" role="alert"><strong>{{message}}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+        {% endfor %}
+    {% endif %}
+    
+    <a class="btn btn-dark mb-4" style="cursor: default;">
+        <i class="fas fa-lock"></i> &nbsp; &nbsp; RESTRICTED ACCESS
+    </a>
+
+    <form method='POST'  autocomplete="off" >{% csrf_token %}
+        <div class="input-group mb-3 mt-5">
+            <span class="input-group-text"><i class="fas fa-user-alt"></i></span>
+            <input type="text" class="form-control" name='username' placeholder="Username" required/>
+        </div>
+        <div class="input-group mb-3 ">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input type="password" class="form-control" name='password' placeholder="Password" required/>
+        </div>
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Login</button>
+            <a href="{% url 'home' %}" class="btn btn-secondary">CANCEL</a>
+        </div>
+    </form>
+</div>
+{% endblock content %}

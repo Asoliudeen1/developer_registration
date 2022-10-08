@@ -14,3 +14,19 @@ html, body {
 #footer, .push {
     height: 50px;
 }
+
+
+.my-btn {
+    width: 90px;
+}
+
+/* Remove all the lines in <a> tags */
+a{
+    text-decoration: none !important;
+}
+
+/* Upload filed boxes (File and Image) */
+
+.text-break, .input-group-text{
+    font-size: 13px !important;
+}

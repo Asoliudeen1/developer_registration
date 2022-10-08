@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+
+<!-- Block Title -->
+{% block title %}All Candidates{% endblock title %}
+
+<!-- Block Navbar -->
+{% block navbar %}bg-warning{% endblock navbar %}
+
+{% block nav-content %}
+<span class="text-dark"><i class="fas fa-cog"></i>&nbsp;&nbsp; ADMINISTRATION</span>
+{% endblock nav-content %}
+
+
+{% block content %}
+<div class="container" style="width: 90%; font: size 14px;">
+<a href="{% url 'logout' %}" class="btn btn-outline-danger mt-3 mb-3 my-btn">Log out</a>
+
+<h6 class="card p-2 bg-secondary text-light text-center mb-3">LIST OF CANDIDATES</h6>
+
+<table class="table table-bordered text.center">
+    <thead class="table-secondary">
+        <tr>
+            <th style="width: 30%;">Name</th>
+            <th style="width: 20%;">Email</th>
+            <th style="width: 23%;">Phone</th>
+            <th style="width: 7%;">Gender</th>
+            <th style="width: 15%;">Smoker</th>
+            <th colspan="2" style="width: 5%;">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for candidate in candidates %}
+        <tr>
+            <td>{{candidate.first_name}} {{candidate.last_name}}</td>
+            <td>{{candidate.email}}</td>
+            <td>{{candidate.phone}}</td>
+            <td>{{candidate.gender}}</td>
+            {% if candidate.smoker == '1' %}
+            <td>Yes</td>
+            {% else %}
+            <td>No</td>
+            {% endif %}
+            <td class="bg-secondary">
+                <a href="{% url 'candidate' candidate.id %}" class="btn btn-outline-secondary btn-sm text-light">
+                    <i class="fas fa-user-alt"></i>
+                </a>
+            </td>
+            {% empty %}
+            
+            <td colspan="6" class="text-danger text-center"><strong>No record found</strong></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock content %}
