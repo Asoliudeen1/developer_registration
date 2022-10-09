@@ -21,12 +21,16 @@
 <body>
     <div class="wrapper">
       <header>
-        <nav  class="navbar navbar-expand-lg navbar-dark navbar-sm {% block navbar %} bg-dark {% endblock %}">
-          <a class="navbar-brand flex-grow-1 text-center small-title" style="color: #fff; left: 50%; transform: translateX(-50%); position: relative;">
-            {% block nav-content %}
+        <nav  class="navbar navbar-expand-lg navbar-dark {% block navbar %} bg-dark {% endblock %}">
+         <div class="container-fluid">
+
+          {% block nav-content %}
+          <a class="navbar-brand flex-grow-1 text-center" style="color: #fff; left: 50%; transform: translateX(-50%); position: relative;">
             <i class="fas fa-home"></i>&nbsp;&nbsp; <strong> JOB APPLICATION</strong>
-            {% endblock nav-content %}
           </a>
+          {% endblock nav-content %}
+          
+        </div>
         </nav>
       </header>
 
@@ -41,7 +45,7 @@
       <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
           &copy; {% now "Y" %} Copyright:
           <a class="text-light" href="#" style="text-decoration: none;">
-              <span style="color: #89cff0;">www.your-website.com</span>
+              <span {% block footer-color %}style="color: #89cff0;" {% endblock footer-color %}>www.your-website.com</span>
           </a>
       </div>
     </footer>

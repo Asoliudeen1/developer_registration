@@ -8,6 +8,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.cache import cache_control
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
+from django.db.models import Q
+# COncatenate (F-Name and L-name)
+from django.db.models.functions import Concat  
+from django.db.models import Value as p
+
 
 
 def Login(request):
@@ -56,8 +62,42 @@ def home(request):
 @login_required(login_url='loginpage')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def Candidates(request):
-    candidates = candidate.objects.all()
-    context={'candidates': candidates,}
+    
+    #FILTER
+    # if request.method == 'POST':
+    #     job = request.POST.get('job')
+    #     filters = candidate.objects.filter(job=job)
+    #     context={
+    #     'candidates': filters,
+    #     }
+
+    if request.method == 'POST':
+        job = request.POST.get('job')
+        gender = request.POST.get('gender')
+        filter = candidate.objects.filter(Q(job=job) | Q(gender=gender))
+        context = {
+            'candidates': filter,
+            }
+        return render(request, 'app/candidates.html', context)
+
+    # GLOBAL SEARCH
+    elif 'q' in request.GET:
+        q = request.GET['q']
+        all_candidates_list = candidate.objects.annotate(
+            name =Concat('first_name', p(' '), 'last_name')).filter(Q(name__icontains=q) | Q(first_name__icontains=q) 
+            | Q(last_name__icontains=q) | Q(email__icontains=q) | Q(phone__icontains=q) 
+            | Q(created_at__icontains=q)).order_by('-created_at')
+    else:
+        all_candidates_list = candidate.objects.all().order_by('-created_at')
+    # PAGINATION
+    paginator = Paginator(all_candidates_list, 10) #10 is number of records to display on a Page 
+    page = request.GET.get('page')
+    all_candidates = paginator.get_page(page)
+    
+    
+    context={
+        'candidates': all_candidates,
+        }
     return render(request, 'app/candidates.html', context)
 
 
@@ -65,24 +105,27 @@ def Candidates(request):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def Candidate(request, candidate_id):
     candidateObj = get_object_or_404(candidate, id=candidate_id)
-
-    form = CandidateForm(instance=candidateObj)
-    context={'form': form,}
-    
-    # DISABLE ALL THE FORM FIELDS
-    fields_list = ['experience', 'gender', 'first_name', 'last_name', 'job', 'email',
-                'phone', 'salary', 'birth', 'personality', 'smoker', 'file', 'image', 'frameworks', 
-                'languages', 'databases', 'libraries', 'mobile', 'others','message' ,'status_course',
-                'started_course','finished_course','course','institution','about_course','started_job',
-                'finished_job','company','position','about_job','employed','remote','travel']
-    
-    for field in fields_list:
-        form.fields[field].disabled=True
-        form.fields['file'].widget.attrs.update({'style':'display: none'})
-        form.fields['image'].widget.attrs.update({'style':'display: none'})
+    context= {
+        'candidate': candidateObj
+    }
     return render(request, 'app/candidate.html', context)
 
 
 def Logout(request):
     logout(request)
     return redirect('/')
+
+
+
+
+    # # DISABLE ALL THE FORM FIELDS
+    # fields_list = ['experience', 'gender', 'first_name', 'last_name', 'job', 'email',
+    #             'phone', 'salary', 'birth', 'personality', 'smoker', 'file', 'image', 'frameworks', 
+    #             'languages', 'databases', 'libraries', 'mobile', 'others','message' ,'status_course',
+    #             'started_course','finished_course','course','institution','about_course','started_job',
+    #             'finished_job','company','position','about_job','employed','remote','travel']
+    
+    # for field in fields_list:
+    #     form.fields[field].disabled=True
+    #     form.fields['file'].widget.attrs.update({'style':'display: none'})
+    #     form.fields['image'].widget.attrs.update({'style':'display: none'})

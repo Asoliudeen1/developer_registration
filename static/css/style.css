@@ -20,6 +20,13 @@ html, body {
     width: 90px;
 }
 
+.my-btn2{
+    width: 45px;    
+}
+
+.f-size2{
+    font-size: 20px;
+}
 /* Remove all the lines in <a> tags */
 a{
     text-decoration: none !important;
@@ -29,4 +36,85 @@ a{
 
 .text-break, .input-group-text{
     font-size: 13px !important;
+}
+
+
+/* PAGINATION */
+.page-item.active .page-link {
+    columns: #fff;
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+}
+.pagination > li > a {
+    background-color: #fff;
+    color: #6c757d;
+}
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > span > a:focus,
+.pagination > span > a:hover{
+    color: #111;
+    background-color: #d3d3d3;
+    border: 1px solid #6c757d;
+    box-shadow: none;
+}
+
+/* RESPONSIVE */
+@media(max-width: 1199px) {
+    /* Filter (width 100%) */
+    .wd-100 {
+        width: 100%;
+        padding: 1px;
+    }
+    /* TABLE */
+    .table thead {
+        display: none;
+    }
+    .table, .table tbody, .table tr, .table td {
+        display: block;
+        width: block;
+        width: 100%;
+    }
+    .table tr {
+        margin-bottom: 15px;
+        border: 1px solid #111;
+        border-radius: 3px;
+    }
+    .table td {
+        text-align: right;
+        padding-left: 35%;
+        position: relative;
+        border: 1px solid transparent;
+    }
+
+    .table td::before{
+        content: attr(label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 15px;
+        font-size: 13px;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .table > thead > tr:first-child {
+        display: none;
+        margin-top: 5px;
+    }
+
+    /* First cell - chnage bg-color */
+    #top-border{
+        background-color: #111;
+        color: #fff;
+    }
+
+    /* Responsive border */
+    #sm-border {
+        border: 1px solid #a9a9a9;
+    }
+    /* FOOTER */
+    #footer {
+        font-size: 13px;
+    }
 }
