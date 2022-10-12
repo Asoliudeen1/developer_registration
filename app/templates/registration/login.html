@@ -9,24 +9,16 @@
 {% block navbar %}bg-dark{% endblock navbar %}
 
 {% block nav-content %}
-<a class="navbar-brand flex-grow-1 text-center text-lighy" style="left:50%; transform: translateX(-50%); position: relative;">
+<a class="navbar-brand flex-grow-1 text-center text-light to_center">
     <i class="fas fa-key"></i>&nbsp;&nbsp; LOGIN
 </a>
 {% endblock nav-content %}
 
 
 {% block content %}
-<div class="container card p-3 border-dark mt-5" style="width: 30%;">
-    
-    {% if messages %}
-        {% for message in messages %}
-    <div class="alert alert-danger alert-dismissible fade show text-center" role="alert"><strong>{{message}}</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-        {% endfor %}
-    {% endif %}
-    
-    <a class="btn btn-dark mb-4" style="cursor: default;">
+
+<div class="container card p-3 border-dark mt-5" style="width: 30%;">    
+    <a class="btn btn-dark mb-2" style="cursor: default;">
         <i class="fas fa-lock"></i> &nbsp; &nbsp; RESTRICTED ACCESS
     </a>
 
@@ -44,5 +36,11 @@
             <a href="{% url 'home' %}" class="btn btn-secondary">CANCEL</a>
         </div>
     </form>
+    {% if messages %}
+{% for message in messages %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert" style="width: 100%;"><strong>{{message}}</strong>
+</div>
+{% endfor %}
+{% endif %}
 </div>
 {% endblock content %}

@@ -4,40 +4,60 @@
 <!-- Block Title -->
 {% block title %}All Candidates{% endblock title %}
 
+
+<!-- BLOCK FOOTER -->
+{% block footer-color %}class="text-warning"{% endblock footer-color %}
+
 <!-- Navbar -->
 {% block nav-content %}
 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
 </button>
 <div class="collapse navbar-collapse mt-3 mt-md-3 mt-lg-0" id="navbarSupportedContent">
+    
+    <!-- GET USER -->
     <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-middle">
-      <li class="nav-item">
-        <a href="{% url 'register' %}" class="btn btn-light my-btn2" title="Control Panel">
-            <i class="fas fa-user-cog f-size2"></i>
-        </a>
-        <a href="{% url 'admin:index' %}" target="_blank"  class="btn btn-warning my-btn2" title="Admin">
-                <i class="fas fa-cog f-size2"></i>
-        </a>
+      <li class="nav-item text-light">Welcome: <span class="text-warning">{{user.get_username}}</span>
+    </ul>
 
-        <a href="{% url 'logout' %}" class="btn btn-danger my-btn2" title="Log out">
-            <i class="fas fa-power-off f-size2"></i>
-        </a>
+    <!-- NAVBAR RIGHT SIDE BUTTONS -->
+    <!-- Control Panel -->
+    <a href="#" class="btn btn-light my-btn2" title="Control Panel">
+        <i class="fas fa-user-cog f-size2"></i>
+    </a>
+
+    <!-- Django Admin -->
+    <a href="{% url 'admin:index' %}" target="_blank"  class="btn btn-warning ms-1 my-btn2" title="Admin">
+        <i class="fas fa-cog f-size2"></i>
+    </a>
+
+    <!-- Filter -->
+    <span class="text-light"> |&nbsp;</span>
+    <button class="btn my-btn2" style="background-color: #a8b8d0;" title="Filter" data-bs-toggle="modal" data-bs-target="#filterModal">
+        <i class="fas fa-filter"></i>
+    </button>
+    <!-- Search -->
+    <button class="btn my-btn2 ms-1" style="background-color: #a8b8d0;" title="Search" data-bs-toggle="modal" data-bs-target="#searchModal">
+        <i class="fas fa-search"></i>
+    </button>
+    <span class="text-light">&nbsp;</span>
+
+    <!-- Rfresh Button -->
+    <a href="{% url 'candidates' %}" class="btn btn-secondary ns-1" title="Refresh">
+        <i class="fas fa-sync-alt"></i>
+    </a>
+    <span class="text-light"> |&nbsp;</span>
+
+    <!-- Logout -->
+    <a class="btn btn-danger my-btn2" title="Log out" data-bs-toggle="modal" data-bs-target="#logoutModal">
+        <i class="fas fa-power-off f-size2"></i>
+    </a>
     </li>
       
-    </ul>
+    
     <hr class="text-light">
 
-    <!-- Global Search (navbar) -->
-    <form class="d-flex">
-        <input class="form-control me-1" name="q" type="search" placeholder="Global search" value="{{request.GET.q}}">
-        <button class="btn" style="background: #d3d3d3;" title="search" type="submit">
-            <i class="fas fa-search"></i>
-        </button>
-        <a href="{% url 'candidates' %}" class="btn btn-secondary ns-1" title="Refresh">
-            <i class="fas fa-sync-alt"></i>
-        </a>
-    </form>
-    <hr class="text-light">
+    <hr class="text-light"> -->
 </div>
 {% endblock nav-content %}
 
@@ -45,29 +65,10 @@
 {% block content %}
 <div class="container" style="width: 90%;">
 
-<!-- FILTER -->
-<form method="post" class="mt-5 mb-2">
-    {% csrf_token %}
-    <div class="btn-group wd-100" role="group" aria-label="Basic radio toggle button group">
-        <!-- OCCUPATION -->
-        <input type="submit" class="btn-check" value="FR-22" name="job" id="btnradio1" autocomplete="off">
-        <label {% if request.POST.job == 'FR-22' %} class="btn btn-secondary" {% else %} class="btn btn-outline-secondary" for="btnradio1" {% endif %}>FR-22</label>
-
-        <input type="submit" class="btn-check" value="BA-10" name="job" id="btnradio2" autocomplete="off">
-        <label {% if request.POST.job == 'BA-10' %} class="btn btn-secondary" {% else %} class="btn btn-outline-secondary" for="btnradio2" {% endif %}>BA-10</label>
-
-        <input type="submit" class="btn-check" value="FU-15" name="job" id="btnradio3" autocomplete="off">
-        <label {% if request.POST.job == 'FU-15' %} class="btn btn-secondary" {% else %} class="btn btn-outline-secondary" for="btnradio3" {% endif %}>FU-15</label>
-        &nbsp;&nbsp;
-
-        <!--GENDER-->
-        <input type="submit" class="btn-check" value="M" name="gender" id="btnradio4" autocomplete="off">
-        <label {% if request.POST.gender == 'M' %} class="btn btn-primary my-btn2" {% else %} class="btn btn-outline-primary my-btn2" for="btnradio4" {% endif %}>M</label>
-
-        <input type="submit" class="btn-check" value="F" name="gender" id="btnradio5" autocomplete="off">
-        <label {% if request.POST.gender == 'F' %} class="btn btn-danger my-btn2" {% else %} class="btn btn-outline-danger my-btn2" for="btnradio5" {% endif %}>F</label>
-    </div> 
-</form>
+<!-- DASHBOARD -->
+<h1 class="mt-3 mb-3 card p-5 text-center border-dark">
+    DASHBOARD<span style="font-size: 14px;"></span>
+</h1>
 
 <!-- TABLE -->
 <table class="table table-bordered text.center">
@@ -85,6 +86,10 @@
     </thead>
     <tbody style="font-size:14px;">
         {% for candidate in candidates %}
+
+        <!-- MODAL NOTE -->
+        {% include 'modals/note.html' %}
+
         <tr>
             <td id="top-border" label="Name">{{candidate.first_name}} {{candidate.last_name}}</td>
             <td id="sm-border" label="Email">{{candidate.email}}</td>
@@ -108,10 +113,21 @@
             {% endif %}
             <td id="sm-border" label="Received">{{candidate.created_at| date:'m/d/Y (H:i)'}}</td>
 
-            <td>
+            <td class="btn-side">
                 <a href="{% url 'candidate' candidate.id %}" class="btn btn-secondary my-btn2 btn-sm" title="view candidate">
                     <i class="fas fa-user-alt"></i>
                 </a>
+
+                {% if candidate.company_note %}
+                    <button class="btn btn-warning my-btn2 btn-sm" title="Company note" data-bs-toggle="modal" data-bs-target="#noteModal{{candidate.id}}">
+                        <i class="fas fa-question"></i>
+                    
+                {% else %}
+                    <button disabled class="btn btn-outline-warning my-btn2 btn-sm" title="Company note">
+                        <i class="fas fa-question"></i>
+                    </button>
+                {% endif %}
+
             </td>
             {% empty %}
             
@@ -122,8 +138,56 @@
 </table>
 
 
-<!-- PAGINATION -->
+<!-- PAGINATION --> 
 <nav>
+    {% if candidates.has_other_pages %}
+    <ul class="pagination">
+        {% if candidates.has_previous %}
+        <a href="?page=1" class="btn btn-outline-secondary mb-4" style="border-radius: 1px soliid #d3d3d3;">First</a>
+        <li class="page-item"><a class="page-link" href="?page={{ candidates.previous_page_number }}"><i class="fas fa-angle-double-left"></i></a></li>
+        {% else %}
+        <li class="page-item disabled"></li>
+        {% endif %}
+
+        
+        {% if candidates.number|add:'-2' > 1 %}
+        <li><a class="page-link" href="?page={{ candidates.number|add:'-2' }}">&hellip;</a></li>
+        {% endif %}
+
+        <!-- LIMIT PAGES  -->
+        {% for i in candidates.paginator.page_range %}
+        {% if candidates.number == i %}
+        <li class="page-item active"><span class="page-link">{{ i }}<span class="sr-only"></span></span></li>
+        {% elif i > candidates.number|add:'-2' and i < candidates.number|add:'2' %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if candidates.paginator.num_pages > candidates.number|add:'2' %}
+        <li><a class="page-link" href="?page{{ candidates.number|add:'-2' }}">&hellip;</a></li>
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+        <li><a class="page-link" href="?page={{ candidates.paginator.num_pages }}">{{ candidates.paginator.num_pages }}</a></li>
+        {% endif %}
+
+        {% if candidates.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ candidates.next_page_number }}"><i class="fas fa-angle-double-right"></i></a></li>
+        <a href="?page={{ candidates.paginator.num_pages }}" class="btn btn-outline-secondary mb-4" style="border-radius: 1px soliid #d3d3d3; border-left: none;">Last</a>
+        {% else %}
+        <li class="page-item disabled"></li>
+        {% endif %}
+    </ul>
+{% endif %}
+</nav>
+
+<br><br><br>
+</div>
+{% endblock content %}
+
+
+
+
+<!-- PAGINATION -->
+<!-- <nav>
     {% if candidates.has_other_pages %}
     <ul class="pagination">
         {% if candidates.has_previous %}
@@ -144,14 +208,10 @@
 
         {% if candidates.has_next %}
         <li class="page-item"><a class="page-link" href="?page={{ candidates.next_page_number }}"><i class="fas fa-angle-double-right"></i></a></li>
-        <a href="?page={{ candidates.next_page_number }}" class="btn btn-outline-secondary mb-4" style="border-radius: 1px soliid #d3d3d3; border-left: none;">Last</a>
+        <a href="?page={{ candidates.paginator.num_pages }}" class="btn btn-outline-secondary mb-4" style="border-radius: 1px soliid #d3d3d3; border-left: none;">Last</a>
         {% else %}
         <li class="page-item disabled"></li>
         {% endif %}
     </ul>
 {% endif %}
-</nav> <!-- End PAGINATION -->
-
-<br><br><br>
-</div>
-{% endblock content %}
+</nav> -->

@@ -1,0 +1,35 @@
+{% extends 'modals/baseModal.html' %}
+
+<!-- MODAL ID -->
+{% block modal-id %}id="noteModal{{ candidate.id }}"{% endblock modal-id %}
+
+<!-- MODAL TITLE -->
+{% block modal-title %}
+<i class="fas fa-clipboard"></i>&nbsp;&nbsp; Company Note
+{% endblock modal-title %}
+
+<!-- MODAL BODY -->
+{% block modal-body %}
+<div class="d-flex justify-content-start">
+    <div>
+        {% if candidate.Situation == 'Approved' %}
+            <h6 class="btn btn-success" ></h6>
+        {% elif candidate.Situation == 'Pending' %}
+            <h6 class="btn btn-warning" ></h6>
+        {% else %}
+            <h6 class="btn btn-danger" ></h6>
+        {% endif %}
+    </div>
+    <div class="ms-2">
+        <h6>{{candidate.first_name}} {{candidate.last_name}}</h6>
+    </div>
+</div>
+
+<div class="card p-3 mt-3" style="font-size: 13px;">
+    <p><strong>NOTE:</strong></p>
+    <p>{{candidate.company_note}}</p>
+</div>
+{% endblock modal-body %}
+
+<!-- MODAL FOOTER -->
+{% block modal-footer %}{% endblock modal-footer %}

@@ -1,5 +1,5 @@
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from .forms import CandidateForm
 from django.contrib import messages
 from .models import candidate
@@ -13,6 +13,9 @@ from django.db.models import Q
 # COncatenate (F-Name and L-name)
 from django.db.models.functions import Concat  
 from django.db.models import Value as p
+
+#Export to PDF
+import pdfkit
 
 
 
@@ -52,7 +55,6 @@ def register(request):
 
 
 def home(request):
-    
     form = CandidateForm()
     context={'form': form,}
     return render(request, 'app/home.html', context)
@@ -62,15 +64,7 @@ def home(request):
 @login_required(login_url='loginpage')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def Candidates(request):
-    
-    #FILTER
-    # if request.method == 'POST':
-    #     job = request.POST.get('job')
-    #     filters = candidate.objects.filter(job=job)
-    #     context={
-    #     'candidates': filters,
-    #     }
-
+    # FILTER
     if request.method == 'POST':
         job = request.POST.get('job')
         gender = request.POST.get('gender')
@@ -89,6 +83,7 @@ def Candidates(request):
             | Q(created_at__icontains=q)).order_by('-created_at')
     else:
         all_candidates_list = candidate.objects.all().order_by('-created_at')
+   
     # PAGINATION
     paginator = Paginator(all_candidates_list, 10) #10 is number of records to display on a Page 
     page = request.GET.get('page')
@@ -114,6 +109,41 @@ def Candidate(request, candidate_id):
 def Logout(request):
     logout(request)
     return redirect('/')
+
+
+@login_required(login_url='loginpage')
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def exportToPdf(request, pk):
+    c = get_object_or_404(candidate, id=pk)
+    cookies = request.COOKIES
+    options = {
+        'page-size': 'Letter',
+        'encoding': "UTF-8",
+        'cookie' : [
+            ('csrftoken', cookies ['csrftoken']),
+            ('sessionid', cookies ['sessionid'])
+        ]
+    }
+
+    # pdf = pdfkit.from_url('http://127.0.0.1:8000/'+str(c.id), False, options = options)
+    # response = HttpResponse(pdf, content_type='application/pdf')
+    # response['Content-Disposition'] = 'attachment; filename=candidate.pdf'
+    # return response
+
+    pdf_name = c.first_name + '' + c.last_name + '.pdf'
+    pdf = pdfkit.from_url('http://127.0.0.1:8000/pdf/'+str(c.id), False, options = options)
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format(pdf_name)
+    return response
+
+@login_required(login_url='loginpage')
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def Pdf (request, pk):
+    candidate = get_object_or_404(candidate, id=pk)
+    context = {
+        'candidate':candidate,
+        }
+    return render(request, 'pdf.html',context)
 
 
 

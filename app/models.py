@@ -155,3 +155,6 @@ class candidate(models.Model):
     # Concatenate (when you click over the Candidate)
     def __str__(self):
         return self.first_name + ' ' + self.last_name
+
+
+    

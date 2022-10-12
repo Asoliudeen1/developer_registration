@@ -25,7 +25,7 @@
          <div class="container-fluid">
 
           {% block nav-content %}
-          <a class="navbar-brand flex-grow-1 text-center" style="color: #fff; left: 50%; transform: translateX(-50%); position: relative;">
+          <a class="navbar-brand flex-grow-1 text-center text-light to_center">
             <i class="fas fa-home"></i>&nbsp;&nbsp; <strong> JOB APPLICATION</strong>
           </a>
           {% endblock nav-content %}
@@ -37,18 +37,25 @@
       <!-- ===== Block contente (ROOT) ===== -->
       {% block content %} {% endblock content %}
    
-   
+      
+      <!-- INCLUDES (MODALS) -->
+      {% include 'modals/filter.html' %}
+      {% include 'modals/search.html' %}
+      {% include 'modals/logout.html' %}
     </div>
 
     <!-- Footer -->
+    {% block tag-footer %}
     <footer class="bg-dark text-center text-lg-start" id="footer" style="color: #fff;">
       <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-          &copy; {% now "Y" %} Copyright:
-          <a class="text-light" href="#" style="text-decoration: none;">
-              <span {% block footer-color %}style="color: #89cff0;" {% endblock footer-color %}>www.your-website.com</span>
+          Copyright  &copy; {% now "Y" %} All rights reserved | Made with 
+          <i class="text-danger fas fa-heart"></i> by 
+          <a class="text-light" href="#"target="_blank" style="text-decoration: none;">
+              <span {% block footer-color %}style="color: #89cff0;" {% endblock footer-color %}>www.azeezabiodun.com</span>
           </a>
       </div>
     </footer>
+    {% endblock tag-footer %}
 
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -59,5 +66,7 @@
     <!-- JQUERY MASK -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
+    <!-- CUSTOM JS -->
+    <script src="{% static 'js/custom.js' %}"></script>
   </body>
 </html>

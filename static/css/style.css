@@ -38,6 +38,18 @@ a{
     font-size: 13px !important;
 }
 
+/* Put the navbar content to center */
+.to_center{
+    left:50%;
+    transform: translateX(-50%);
+    position: relative;
+}
+
+.btn-side{
+    display: -webkit-flex;
+    display: flex;
+    flex-wrap: nowrap;
+}
 
 /* PAGINATION */
 .page-item.active .page-link {

@@ -102,7 +102,7 @@ class CandidateForm(forms.ModelForm):
         )
     )
 
-    # FIle (upload)
+    # Image (upload)
     image = forms.FileField(
         label='Photo',
         widget=forms.ClearableFileInput(

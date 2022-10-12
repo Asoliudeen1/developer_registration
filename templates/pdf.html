@@ -1,0 +1,33 @@
+{% extends 'app/candidate.html' %}
+
+
+<!-- BLOCK font -->
+{% block font %} style="font=family: Helvetica;"{% endblock font %}
+
+<!-- BLOCK NAVBAR CONTENT -->
+{% block nav-content %}
+<div class="text-center text-light" style="font-family: Helvetica; font-size: 18px;">
+    <i class="fas {% if candidate.gender == 'F' %} fa-female {% else %} fa-male{% endif %} f-size">
+    </i>&nbsp;&nbsp; {{candidate.first_name}} {{candidate.last_name}}
+</div>
+{% endblock nav-content %}
+
+
+<!-- BLOCK MARGIN-TOP -->
+{% block mt %}{% endblock mt %}
+
+
+{% block dt-user %}
+    <div class="mb-4 bg-light text-center">
+        <strong>Generate at:</strong> {% now "m/d/Y (H:i)" %} |
+        <strong>By:</strong> {{ user.get_username}}
+    </div>
+{% endblock dt-user%}
+
+<!-- BUTTON -->
+{% block btn-download %}{% endblock btn-download %}
+{% block btn-bottom %}{% endblock btn-bottom %}
+
+
+<!-- FOOTER  -->
+{% block tag-footer %}{% endblock tag-footer %}
