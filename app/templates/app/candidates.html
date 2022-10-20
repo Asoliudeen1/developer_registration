@@ -17,22 +17,30 @@
     
     <!-- GET USER -->
     <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-middle">
-      <li class="nav-item text-light">Welcome: <span class="text-warning">{{user.get_username}}</span>
+        <li class="nav-item text-light">
+            {% if request.user.is_superuser %}
+                <i class="fas fa-cog f0size2"></i>&nbsp; ADMINISTRATOR
+            {% else %}
+                Welcome: <span class="text-warning">{{user.get_username}}</span>
+            {% endif %}
+        </li>
     </ul>
 
     <!-- NAVBAR RIGHT SIDE BUTTONS -->
     <!-- Control Panel -->
-    <a href="#" class="btn btn-light my-btn2" title="Control Panel">
-        <i class="fas fa-user-cog f-size2"></i>
-    </a>
+    {% if request.user.is_superuser %}
+        <a href="#" class="btn btn-light my-btn2" title="Control Panel">
+            <i class="fas fa-user-cog f-size2"></i>
+        </a>
 
-    <!-- Django Admin -->
-    <a href="{% url 'admin:index' %}" target="_blank"  class="btn btn-warning ms-1 my-btn2" title="Admin">
-        <i class="fas fa-cog f-size2"></i>
-    </a>
+        <!-- Django Admin -->
+        <a href="{% url 'admin:index' %}" target="_blank"  class="btn btn-warning ms-1 my-btn2" title="Admin">
+            <i class="fas fa-cog f-size2"></i>
+        </a>
+        <span class="text-light"> |&nbsp;</span>
+    {% endif %}
 
     <!-- Filter -->
-    <span class="text-light"> |&nbsp;</span>
     <button class="btn my-btn2" style="background-color: #a8b8d0;" title="Filter" data-bs-toggle="modal" data-bs-target="#filterModal">
         <i class="fas fa-filter"></i>
     </button>
@@ -65,10 +73,15 @@
 {% block content %}
 <div class="container" style="width: 90%;">
 
+<!-- SUCCESS MESSAGE FROM BACKEND -->
+<div class="mt-3">
+    {% include 'partials/successMsg.html' %}
+</div>
+
 <!-- DASHBOARD -->
-<h1 class="mt-3 mb-3 card p-5 text-center border-dark">
-    DASHBOARD<span style="font-size: 14px;"></span>
-</h1>
+<div class="mt-3 mb-2">
+    {% include 'dashboard/dashboard.html' %}
+</div>
 
 <!-- TABLE -->
 <table class="table table-bordered text.center">
@@ -81,14 +94,17 @@
             <th style="width: 10%;">Occupation</th>
             <th style="width: 10%;">Experience</th>
             <th style="width: 17%;">Registration Date</th>
-            <th colspan="2" style="width: 5%;">Action</th>
+            <th colspan="2" style="width: 5%;">Actions</th>
         </tr>
     </thead>
     <tbody style="font-size:14px;">
         {% for candidate in candidates %}
 
-        <!-- MODAL NOTE -->
+        <!-- MODAL NOTE (PK)-->
         {% include 'modals/note.html' %}
+
+        <!-- MODAL DELETE (PK)-->
+        {% include 'modals/delete.html' %}
 
         <tr>
             <td id="top-border" label="Name">{{candidate.first_name}} {{candidate.last_name}}</td>
@@ -117,15 +133,25 @@
                 <a href="{% url 'candidate' candidate.id %}" class="btn btn-secondary my-btn2 btn-sm" title="view candidate">
                     <i class="fas fa-user-alt"></i>
                 </a>
-
-                {% if candidate.company_note %}
-                    <button class="btn btn-warning my-btn2 btn-sm" title="Company note" data-bs-toggle="modal" data-bs-target="#noteModal{{candidate.id}}">
-                        <i class="fas fa-question"></i>
-                    
+                
+                <!-- ADMINISTRATOR -->
+                {% if request.user.is_superuser %}
+                    <a href="" class="btn btn-danger btn-sm ms-1 my-btn2" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal{{ candidate.id }}">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                
                 {% else %}
-                    <button disabled class="btn btn-outline-warning my-btn2 btn-sm" title="Company note">
-                        <i class="fas fa-question"></i>
-                    </button>
+                <!-- USERS -->
+                    {% if candidate.company_note %}
+                        <button class="btn btn-warning my-btn2 btn-sm" title="Company note" data-bs-toggle="modal" data-bs-target="#noteModal{{candidate.id}}">
+                            <i class="fas fa-question"></i>
+                        
+                    {% else %}
+                        <button disabled class="btn btn-outline-warning my-btn2 btn-sm" title="Company note">
+                            <i class="fas fa-question"></i>
+                        </button>
+                    {% endif %}
+                
                 {% endif %}
 
             </td>
@@ -136,7 +162,7 @@
         {% endfor %}
     </tbody>
 </table>
-
+<hr>
 
 <!-- PAGINATION --> 
 <nav>

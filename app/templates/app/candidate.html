@@ -126,6 +126,11 @@
     
     {% block btn-bottom %}
     <a href="{% url 'candidates' %}" class="btn btn-secondary mt-3 mb-3">Back</a>
+    
+    {% if request.user.is_superuser %}
+        <a href="{% url 'admin:app_candidate_change' candidate.id %}"  target="_blank" class="btn btn-dark mt-3 mb-3">Note</a>
+    {% endif %}
+    
     <a href="{% url 'exporttopdf' candidate.id %}" class="btn btn-warning mt-3 mb-3">Export to PDF</a>
     {% endblock btn-bottom %}
 </div>

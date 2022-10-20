@@ -4,15 +4,18 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('register/', views.register, name='register'),
+    path('register', views.register, name='register'),
     path('candidates/', views.Candidates, name='candidates'),
-    path('candidate/<int:candidate_id>/', views.Candidate, name='candidate'),
+    path('<int:candidate_id>/', views.Candidate, name='candidate'),
+    path('delete/<int:pk>/', views.Delete, name='delete'),
 
-    # EXPORT TO PDF
-    path('<int:pk>/exporttopdf/', views.exportToPdf, name='exporttopdf'),
-   # path('pdf/<int:pk>/', views.Pdf, name='pdf'),
 
     #Login and Logout
     path('login/', views.Login, name='loginpage'),
     path('logout/', views.Logout, name='logout'),
+
+
+    # EXPORT TO PDF
+    path('<int:pk>/exporttopdf/', views.exportToPdf, name='exporttopdf'),
+    path('pdf/<int:pk>/', views.pdf, name='pdf'),
 ]

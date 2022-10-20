@@ -1,0 +1,10 @@
+  <!-- SUCCESS Messages from backend -->
+  <div class="text-center ">
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+            <div class="alert alert-primary alert-dismissible fade show" role="alert"><strong>{{message}}</strong>
+                <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>

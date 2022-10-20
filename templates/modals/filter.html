@@ -13,24 +13,33 @@
 <!-- FILTER -->
 <form method="post">
     {% csrf_token %}
-    <div class="btn-group wd-100" role="group" aria-label="Basic radio toggle button group">
-        <!-- OCCUPATION -->
-        <input type="submit" class="btn-check" value="FR-22" name="job" id="btnradio1" autocomplete="off">
-        <label {% if request.POST.job == 'FR-22' %} class="btn btn-secondary" {% else %} class="btn btn-outline-secondary" for="btnradio1" {% endif %}>FR-22</label>
+    <div class="row">   
+        
+        <div class="btn-group wd-100" role="group">
+            
+            <!-- OCCUPATION -->
+            <div class="col-8">
+                <h6>* Occupation</h6> 
+                <input type="submit" class="btn-check" value="FR-22" name="job" id="btnradio1" autocomplete="off">
+                <label {% if request.POST.job == 'FR-22' %} class="btn btn-secondary" {% else %} class="btn btn-outline-secondary" for="btnradio1" {% endif %}>FR-22</label>
 
-        <input type="submit" class="btn-check" value="BA-10" name="job" id="btnradio2" autocomplete="off">
-        <label {% if request.POST.job == 'BA-10' %} class="btn btn-secondary" {% else %} class="btn btn-outline-secondary" for="btnradio2" {% endif %}>BA-10</label>
+                <input type="submit" class="btn-check" value="BA-10" name="job" id="btnradio2" autocomplete="off">
+                <label {% if request.POST.job == 'BA-10' %} class="btn btn-secondary" {% else %} class="btn btn-outline-secondary" for="btnradio2" {% endif %}>BA-10</label>
 
-        <input type="submit" class="btn-check" value="FU-15" name="job" id="btnradio3" autocomplete="off">
-        <label {% if request.POST.job == 'FU-15' %} class="btn btn-secondary" {% else %} class="btn btn-outline-secondary" for="btnradio3" {% endif %}>FU-15</label>
-        &nbsp;&nbsp;
+                <input type="submit" class="btn-check" value="FU-15" name="job" id="btnradio3" autocomplete="off">
+                <label {% if request.POST.job == 'FU-15' %} class="btn btn-secondary" {% else %} class="btn btn-outline-secondary" for="btnradio3" {% endif %}>FU-15</label>
+            </div>
 
-        <!--GENDER-->
-        <input type="submit" class="btn-check" value="M" name="gender" id="btnradio4" autocomplete="off">
-        <label {% if request.POST.gender == 'M' %} class="btn btn-primary my-btn2" {% else %} class="btn btn-outline-primary my-btn2" for="btnradio4" {% endif %}>M</label>
+            <!--GENDER-->
+            <div class="col-4">
+                <h6>* Gender</h6> 
+                <input type="submit" class="btn-check" value="M" name="gender" id="btnradio4" autocomplete="off">
+                <label {% if request.POST.gender == 'M' %} class="btn btn-primary my-btn2" {% else %} class="btn btn-outline-primary my-btn2" for="btnradio4" {% endif %}>M</label>
 
-        <input type="submit" class="btn-check" value="F" name="gender" id="btnradio5" autocomplete="off">
-        <label {% if request.POST.gender == 'F' %} class="btn btn-danger my-btn2" {% else %} class="btn btn-outline-danger my-btn2" for="btnradio5" {% endif %}>F</label>
-    </div> 
+                <input type="submit" class="btn-check" value="F" name="gender" id="btnradio5" autocomplete="off">
+                <label {% if request.POST.gender == 'F' %} class="btn btn-danger my-btn2" {% else %} class="btn btn-outline-danger my-btn2" for="btnradio5" {% endif %}>F</label>
+            </div>
+        </div> 
+    </div>
 </form>
 {% endblock modal-body %}

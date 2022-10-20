@@ -1,6 +1,4 @@
 
-from random import choices
-from tabnanny import verbose
 from django.db import models
 from multiselectfield import MultiSelectField
 
