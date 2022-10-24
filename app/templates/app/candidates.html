@@ -29,13 +29,13 @@
     <!-- NAVBAR RIGHT SIDE BUTTONS -->
     <!-- Control Panel -->
     {% if request.user.is_superuser %}
-        <a href="#" class="btn btn-light my-btn2" title="Control Panel">
+        <a href="{% url 'admin:app_candidate_changelist' %}" target="_blank" class="btn btn-light my-btn2" title="Control Panel">
             <i class="fas fa-user-cog f-size2"></i>
         </a>
 
         <!-- Django Admin -->
-        <a href="{% url 'admin:index' %}" target="_blank"  class="btn btn-warning ms-1 my-btn2" title="Admin">
-            <i class="fas fa-cog f-size2"></i>
+        <a href="{% url 'admin:app_email_changelist' %}" target="_blank"  class="btn btn-warning ms-1 my-btn2" title="Admin">
+            <i class="fas fa-envelope f-size2"></i>
         </a>
         <span class="text-light"> |&nbsp;</span>
     {% endif %}
@@ -105,6 +105,11 @@
 
         <!-- MODAL DELETE (PK)-->
         {% include 'modals/delete.html' %}
+        
+        <!-- MODAL MESSAGE (PK)-->
+        {% include 'modals/email.html' %}
+        
+
 
         <tr>
             <td id="top-border" label="Name">{{candidate.first_name}} {{candidate.last_name}}</td>
@@ -145,10 +150,15 @@
                     {% if candidate.company_note %}
                         <button class="btn btn-warning my-btn2 btn-sm" title="Company note" data-bs-toggle="modal" data-bs-target="#noteModal{{candidate.id}}">
                             <i class="fas fa-question"></i>
-                        
+                        <button class="btn btn-primary ms-1"   data-bs-toggle="modal" data-bs-target="#emailModal{{ candidate.id }}">
+                            <i class="fas fa-envelope"></i>
+                        </button>
                     {% else %}
-                        <button disabled class="btn btn-outline-warning my-btn2 btn-sm" title="Company note">
+                        <button disabled class="btn btn-outline-warning text-dark my-btn2 btn-sm" title="Company note">
                             <i class="fas fa-question"></i>
+                        </button>
+                        <button  disabled class="btn btn-outline-primary text-dark ms-1">
+                            <i class="fas fa-envelope"></i>
                         </button>
                     {% endif %}
                 

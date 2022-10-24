@@ -18,4 +18,7 @@ urlpatterns = [
     # EXPORT TO PDF
     path('<int:pk>/exporttopdf/', views.exportToPdf, name='exporttopdf'),
     path('pdf/<int:pk>/', views.pdf, name='pdf'),
+
+    # SENDEMAIL
+    path('email/', views.email, name='email'),
 ]

@@ -1,15 +1,14 @@
-
 from django.shortcuts import render, redirect, HttpResponse
-from .forms import CandidateForm
+from .forms import CandidateForm, EmailForm
 from django.contrib import messages
-from .models import candidate
+from .models import Email, candidate
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.views.decorators.cache import cache_control
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.core.mail import EmailMessage
 
 # COncatenate (F-Name and L-name)
 from django.db.models.functions import Concat  
@@ -165,6 +164,36 @@ def exportToPdf(request, pk):
 def pdf(request, pk):
     candidateobj = candidate.objects.get(id=pk)
     return render(request, "app/pdf.html", {'candidate':candidateobj})
+
+
+
+def email(request):
+    if request.method == 'POST':
+        # save message to DB
+        to_db = Email(
+            status = request.POST.get('status'),
+            name = request.POST.get('name'),
+            email = request.POST.get('email'),
+            message = request.POST.get('message'),
+            subject = request.POST.get('subject'),
+        )
+        to_db.save()
+
+        #Send email 
+        form = EmailForm(request.POST)
+        company = "TT Software Solutions"
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            subject = form.cleaned_data["subject"]
+            message = form.cleaned_data["message"]
+
+            mail = EmailMessage(subject, message, company, [email])
+            mail.send()
+            messages.success(request, 'Email sent successfully')
+            return redirect('candidates')
+    else:
+        form = EmailForm()
+        return render(request, {'form':form})
 
 
 

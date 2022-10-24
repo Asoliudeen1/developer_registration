@@ -1,7 +1,5 @@
-from dataclasses import fields
-from urllib import request
 from django.contrib import admin
-from app.models import candidate
+from app.models import Email, candidate
 from django.utils.html import format_html
 from .forms import CandidateForm
 
@@ -15,7 +13,7 @@ class CandidateAdmin(admin.ModelAdmin):
     list_per_page = 10
 
     # READONLY (ADMIN DASHBOARD)
-    readonly_fields = ['experience', 'gender', 'first_name', 'last_name', 'job', 'email', 
+    readonly_fields = ['experience', 'gender', 'first_name', 'last_name', 'job', 
     'phone', 'salary', 'birth', 'personality', 'smoker', 'file', 'image', 'frameworks', 
     'languages', 'databases', 'libraries', 'mobile', 'others','message' ,'status_course',
     'started_course','finished_course','course','institution','about_course','started_job',
@@ -79,6 +77,10 @@ class CandidateAdmin(admin.ModelAdmin):
         return format_html('<strong><p style="color: {}">{}</p></strong>'.format(color, obj.Situation))
     status.allow_tags = True
 
-        
+class EmailAdmin(admin.ModelAdmin):
+    readonly = ('name', 'subject', 'email',  'status')
+    list_display= ['name', 'subject', 'email',  'status']
+    list_per_page = 10
 
 admin.site.register(candidate, CandidateAdmin)
+admin.site.register(Email, EmailAdmin)

@@ -1,8 +1,5 @@
-from email.mime import image
-from faulthandler import disable
-import re
 from django import forms
-from .models import SMOKER, STATUS_COURSE, candidate
+from .models import SMOKER, Email, candidate
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from datetime import date 
@@ -442,3 +439,11 @@ class CandidateForm(forms.ModelForm):
         if finished_job > datetime.date.today():
              raise forms.ValidationError('Enter Valid date (Future date is not valid)')
         return finished_job
+
+
+class EmailForm(forms.Form):
+    email = forms.EmailField()
+    subject = forms.CharField(max_length=100)
+    message = forms.CharField(widget= forms.Textarea)
+    class Meta:
+        fields = '__all__'

@@ -154,5 +154,18 @@ class candidate(models.Model):
     def __str__(self):
         return self.first_name + ' ' + self.last_name
 
+    
+class Email(models.Model):
+    # Hidden
+    name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=50)
+    status = models.CharField(max_length=50)
+    # Non Hidden
+    subject = models.CharField(max_length=50)
+    message = models.TextField()
+    
+    def __str__(self):
+        return self.name
+
 
     
