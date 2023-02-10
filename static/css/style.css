@@ -130,3 +130,24 @@ a{
         font-size: 13px;
     }
 }
+
+/* CHATBOX */
+/* Chat Data (First Container */
+#chat-data {
+    width: 80%;
+}
+
+/* Chat Data (Second Container */
+.card-chat {
+    width: 80%;
+    font-size: 14px;
+    overflow-y: auto;
+    height: 700px;
+    scroll-behavior: smooth;
+}
+
+/* Font-size icon (back button navbar [back.html]) */
+/* #btn-nav */
+.fa-size {
+    font-size: 20px;
+}

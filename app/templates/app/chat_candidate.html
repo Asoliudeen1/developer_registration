@@ -1,0 +1,72 @@
+{% extends 'base.html' %} 
+
+
+ <!-- Block Titile -->
+{% block title %}Chat Group{% endblock title %}
+
+
+
+<!-- Block Footer -->
+{% block footer-color %}style="color: #d3d3d3;" {% endblock footer-color %}>
+
+<!-- Navbar -->
+{% block nav-content %}
+<a class="navbar-brand flex-grow-1 text-center text-align to_center">
+  <i class="fas fa-comment-alt"></i>&nbsp;&nbsp; ABOUT CANDIDATE
+</a>
+
+<!-- Back -->
+{% include 'partials/back.html' %}
+
+{% endblock nav-content %}
+
+
+{% block content %}
+<style>body {background-color: #e2e3e5}</style>
+
+
+<div class="container mb-3 mt-4" id="chat-data">
+  <button class="btn btn-light border-dark" style="cursor: default;">
+    Candidate: <strong>{{ candidateObj.first_name }} {{ candidateObj.last_name }}</strong>
+  </button>
+
+  <button class="btn {% if candidateObj.Situation == 'Pending' %} btn-warning {% elif candidateObj.Situation == 'Approved' %} btn-success {% else %} btn-danger {% endif %} border-dark" style="cursor: default;">
+    {{ candidateObj.Situation }}
+  </button>
+</div>
+<div class='container mt-3 mb-5 card-chat'>
+  <div class="card border p-4" id='top'>
+    <form method="POST" nonvalidate>
+      {% csrf_token %}
+      <input type='hidden' name="candidate_email" value={{ candidateObj.email }}>
+       <input type='hidden' name="user" value={{ user.get_username }}>
+       <div class="input-group mb-4">
+          <input type='text' name="chat" class="form-control" placeholder="comment">
+          <button class="btn btn-outline-secondary" type="submit">Submit</button>
+       </div>
+       <hr class="text-primary border-5">
+    </form>
+
+    
+    {% for data in chat_candidate %}  <!-- 'FOR' to get candidate chat -->
+      {% if data.candidate_email == candidateObj.email  %} <!--  it makes a comparison (two models class)-->
+        {% for x in list_users %} <!--  'FOR' to get all users -->
+          {% if x.is_superuser %}
+            {% if data.user == x.username %}
+              {% include 'partials/talk_admin.html' %}
+            {% else %}
+              {% include 'partials/talk_users.html' %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+
+
+    <!-- Go Up -->
+    {% include 'partials/go_up.html' %}
+
+
+  </div>
+</div>
+{% endblock content %}

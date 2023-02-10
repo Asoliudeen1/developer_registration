@@ -87,14 +87,15 @@
 <table class="table table-bordered text.center">
     <thead class="table-secondary">
         <tr>
-            <th style="width: 16%;">Name</th>
-            <th style="width: 22%;">Email</th>
+            <th style="width: 13%;">Name</th>
+            <th style="width: 18%;">Email</th>
             <th style="width: 14%;">Phone</th>
             <th style="width: 6%;">Gender</th>
             <th style="width: 10%;">Occupation</th>
             <th style="width: 10%;">Experience</th>
-            <th style="width: 17%;">Registration Date</th>
-            <th colspan="2" style="width: 5%;">Actions</th>
+            <th style="width: 15%;">Registration Date</th>
+            <th  colspan='2' style="width: 14%; text-align:center;" class="bg-secondary text-light">
+                <i class="fas fa-tools"></i> &nbsp; Actions</th>
         </tr>
     </thead>
     <tbody style="font-size:14px;">
@@ -138,6 +139,10 @@
                 <a href="{% url 'candidate' candidate.id %}" class="btn btn-secondary my-btn2 btn-sm" title="view candidate">
                     <i class="fas fa-user-alt"></i>
                 </a>
+
+                 <a href="{% url 'chat-candidate' candidate.id %}" class="btn btn-sm my-btn2 ms-1" title="About candidate" style='background-color: #e2e3e5;'>
+                    <i class="fas fa-comment-alt"></i>
+                </a>
                 
                 <!-- ADMINISTRATOR -->
                 {% if request.user.is_superuser %}
@@ -148,13 +153,14 @@
                 {% else %}
                 <!-- USERS -->
                     {% if candidate.company_note %}
-                        <button class="btn btn-warning my-btn2 btn-sm" title="Company note" data-bs-toggle="modal" data-bs-target="#noteModal{{candidate.id}}">
+                        <button class="btn btn-warning my-btn2 btn-sm ms-1" title="Company note" data-bs-toggle="modal" data-bs-target="#noteModal{{candidate.id}}">
                             <i class="fas fa-question"></i>
+
                         <button class="btn btn-primary ms-1"   data-bs-toggle="modal" data-bs-target="#emailModal{{ candidate.id }}">
                             <i class="fas fa-envelope"></i>
                         </button>
                     {% else %}
-                        <button disabled class="btn btn-outline-warning text-dark my-btn2 btn-sm" title="Company note">
+                        <button disabled class="btn btn-outline-warning text-dark my-btn2 btn-sm ms-1" title="Company note">
                             <i class="fas fa-question"></i>
                         </button>
                         <button  disabled class="btn btn-outline-primary text-dark ms-1">

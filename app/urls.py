@@ -21,4 +21,7 @@ urlpatterns = [
 
     # SENDEMAIL
     path('email/', views.email, name='email'),
+
+    #Chat 
+    path('chat-candidate/<int:id>/', views.chat_candidate, name='chat-candidate')
 ]

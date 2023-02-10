@@ -168,4 +168,13 @@ class Email(models.Model):
         return self.name
 
 
-    
+
+# Chat
+class ChartCandidate(models.Model):
+    candidate_email = models.CharField(max_length=50)
+    user = models.CharField(max_length=50)
+    chat = models.CharField(max_length=500)
+    dt = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user

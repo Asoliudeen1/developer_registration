@@ -1,13 +1,18 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .forms import CandidateForm, EmailForm
+from .forms import CandidateForm, EmailForm, ChatCandidateForm
 from django.contrib import messages
-from .models import Email, candidate
+from .models import Email, candidate, ChartCandidate
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
 from django.db.models import Q
+
+# Get users
+from django.contrib.auth.models import User
+
+# Send email
 from django.core.mail import EmailMessage
 
 # COncatenate (F-Name and L-name)
@@ -131,9 +136,21 @@ def Candidate(request, candidate_id):
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def Delete(request, pk):
     candidateObj = candidate.objects.get(id=pk)
-    candidateObj.delete()
-    messages.success(request, 'Candidate deleted successfully')
-    return redirect('candidates')
+
+    # DELETE CHAT ONCE CANDIDATE DELETED
+    candidate_emails = candidate.objects.values_list('email', flat=True)
+    y = ChartCandidate.objects.filter(candidate_email__in = candidate_emails)
+    for data in y:
+        if data.candidate_email in candidateObj.email:
+            candidateObj.delete()
+            ChartCandidate.objects.exclude(candidate_email__in = candidate_emails).delete()
+            messages.success(request, 'Candidate deleted successfully')
+            return redirect('candidates')
+        else:
+            candidateObj.delete()
+            messages.success(request, 'Candidate deleted successfully')
+            return redirect('candidates')
+
 
 
 @login_required(login_url="loginpage")
@@ -209,3 +226,27 @@ def email(request):
     #     form.fields[field].disabled=True
     #     form.fields['file'].widget.attrs.update({'style':'display: none'})
     #     form.fields['image'].widget.attrs.update({'style':'display: none'})
+
+
+@login_required(login_url="loginpage")
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def chat_candidate(request, id):
+    candidateObj = candidate.objects.get(pk=id)
+    chat_candidate = ChartCandidate.objects.all().order_by('-dt')
+    list_users = User.objects.all()
+
+    if request.method == 'POST':
+        form = ChatCandidateForm(request.POST or None)
+        if form.is_valid():
+            form.save()
+            return redirect('chat-candidate', id=candidateObj.id)
+    else:
+        form = ChatCandidateForm()
+    context = {
+        'form': form,
+        'chat_candidate': chat_candidate,
+        'list_users': list_users,
+        'candidateObj': candidateObj
+    }
+    
+    return render(request, 'app/chat_candidate.html', context)

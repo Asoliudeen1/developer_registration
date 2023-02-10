@@ -1,7 +1,6 @@
 from django import forms
-from .models import SMOKER, Email, candidate
+from .models import SMOKER, candidate, ChartCandidate
 from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError
 from datetime import date 
 import datetime
 
@@ -421,6 +420,7 @@ class CandidateForm(forms.ModelForm):
              raise forms.ValidationError('Enter Valid date (Future date is not valid)')
         return started_course
 
+
     def clean_finished_course(self):
         finished_course = self.cleaned_data.get('finished_course')
         if finished_course > datetime.date.today():
@@ -447,3 +447,9 @@ class EmailForm(forms.Form):
     message = forms.CharField(widget= forms.Textarea)
     class Meta:
         fields = '__all__'
+
+# CHAT
+class ChatCandidateForm(forms.ModelForm):
+    class Meta:
+        model = ChartCandidate
+        fields = "__all__"
